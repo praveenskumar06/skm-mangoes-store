@@ -1,0 +1,1 @@
+# skm-mangoes-store
