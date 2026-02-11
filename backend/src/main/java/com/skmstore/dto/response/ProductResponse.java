@@ -17,6 +17,7 @@ public class ProductResponse {
     private BigDecimal minOrderKg;
     private boolean inStock;
     private boolean active;
+    private boolean special;
     private Map<String, String> attributes;
 
     public ProductResponse() {
@@ -57,6 +58,9 @@ public class ProductResponse {
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+
+    public boolean isSpecial() { return special; }
+    public void setSpecial(boolean special) { this.special = special; }
 
     public Map<String, String> getAttributes() { return attributes; }
     public void setAttributes(Map<String, String> attributes) { this.attributes = attributes; }

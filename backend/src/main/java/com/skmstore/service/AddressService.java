@@ -1,5 +1,6 @@
 package com.skmstore.service;
 
+import com.skmstore.constants.StoreConstants;
 import com.skmstore.dto.request.AddressRequest;
 import com.skmstore.exception.BusinessException;
 import com.skmstore.exception.ResourceNotFoundException;
@@ -10,15 +11,10 @@ import com.skmstore.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class AddressService {
-
-    private static final List<String> ALLOWED_STATES = Arrays.asList(
-            "Tamil Nadu", "Pondicherry", "Puducherry", "Karnataka"
-    );
 
     private final AddressRepository addressRepository;
     private final UserRepository userRepository;
@@ -38,18 +34,18 @@ public class AddressService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         // Validate delivery zone
-        boolean validState = ALLOWED_STATES.stream()
+        boolean validState = StoreConstants.DELIVERY_ZONES.stream()
                 .anyMatch(s -> s.equalsIgnoreCase(request.getState()));
         if (!validState) {
-            throw new BusinessException("Delivery is available only in: " + String.join(", ", ALLOWED_STATES));
+            throw new BusinessException("Delivery is available only in: " + String.join(", ", StoreConstants.DELIVERY_ZONES));
         }
 
-        // If this is the first address or marked as default, handle defaults
+        List<Address> existing = addressRepository.findByUserId(userId);
+        boolean isFirst = existing.isEmpty();
+
+        // If marked as default, unset other defaults in one query
         if (request.getIsDefault() != null && request.getIsDefault()) {
-            addressRepository.findByUserId(userId).forEach(a -> {
-                a.setIsDefault(false);
-                addressRepository.save(a);
-            });
+            addressRepository.clearDefaultsByUserId(userId);
         }
 
         Address address = new Address();
@@ -60,12 +56,8 @@ public class AddressService {
         address.setCity(request.getCity());
         address.setState(request.getState());
         address.setPincode(request.getPincode());
-        address.setIsDefault(request.getIsDefault() != null ? request.getIsDefault() : false);
-
-        // If first address, make it default
-        if (addressRepository.findByUserId(userId).isEmpty()) {
-            address.setIsDefault(true);
-        }
+        // First address is always default
+        address.setIsDefault(isFirst || Boolean.TRUE.equals(request.getIsDefault()));
 
         return addressRepository.save(address);
     }

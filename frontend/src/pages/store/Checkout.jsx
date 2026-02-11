@@ -3,8 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import api from '../../services/api';
 import { useCart } from '../../context/CartContext';
 import { useSeason } from '../../context/SeasonContext';
-
-const STATES = ['Tamil Nadu', 'Pondicherry', 'Karnataka'];
+import { DELIVERY_ZONES } from '../../constants';
 
 export default function Checkout() {
   const { items, totalPrice, clearCart } = useCart();
@@ -135,7 +134,7 @@ export default function Checkout() {
                   onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
                   className="px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-500"
                 >
-                  {STATES.map((s) => <option key={s}>{s}</option>)}
+                  {DELIVERY_ZONES.map((s) => <option key={s}>{s}</option>)}
                 </select>
               </div>
               <input

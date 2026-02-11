@@ -23,6 +23,11 @@ import OrderManagement from './pages/admin/OrderManagement';
 import UserManagement from './pages/admin/UserManagement';
 import Settings from './pages/admin/Settings';
 
+import AboutUs from './pages/info/AboutUs';
+import FAQ from './pages/info/FAQ';
+import ContactUs from './pages/info/ContactUs';
+import MangoTips from './pages/info/MangoTips';
+
 export default function App() {
   return (
     <BrowserRouter>
@@ -38,6 +43,11 @@ export default function App() {
                 <Route path="/products/:id" element={<ProductDetail />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+
+                <Route path="/about" element={<AboutUs />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="/contact" element={<ContactUs />} />
+                <Route path="/mango-tips" element={<MangoTips />} />
 
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={

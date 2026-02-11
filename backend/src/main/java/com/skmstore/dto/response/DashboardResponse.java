@@ -1,6 +1,7 @@
 package com.skmstore.dto.response;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 public class DashboardResponse {
 
@@ -9,6 +10,11 @@ public class DashboardResponse {
     private long totalProducts;
     private long totalUsers;
     private long pendingOrders;
+
+    // Date range stats
+    private long rangeOrderCount;
+    private BigDecimal rangeRevenue;
+    private Map<String, Long> statusBreakdown;
 
     public DashboardResponse() {
     }
@@ -27,4 +33,13 @@ public class DashboardResponse {
 
     public long getPendingOrders() { return pendingOrders; }
     public void setPendingOrders(long pendingOrders) { this.pendingOrders = pendingOrders; }
+
+    public long getRangeOrderCount() { return rangeOrderCount; }
+    public void setRangeOrderCount(long rangeOrderCount) { this.rangeOrderCount = rangeOrderCount; }
+
+    public BigDecimal getRangeRevenue() { return rangeRevenue; }
+    public void setRangeRevenue(BigDecimal rangeRevenue) { this.rangeRevenue = rangeRevenue; }
+
+    public Map<String, Long> getStatusBreakdown() { return statusBreakdown; }
+    public void setStatusBreakdown(Map<String, Long> statusBreakdown) { this.statusBreakdown = statusBreakdown; }
 }

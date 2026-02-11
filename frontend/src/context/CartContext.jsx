@@ -12,6 +12,13 @@ export function CartProvider({ children }) {
     localStorage.setItem('cart', JSON.stringify(items));
   }, [items]);
 
+  // Listen for cart-clear events dispatched by AuthContext on login/logout
+  useEffect(() => {
+    const handleClearCart = () => setItems([]);
+    window.addEventListener('cart-clear', handleClearCart);
+    return () => window.removeEventListener('cart-clear', handleClearCart);
+  }, []);
+
   const addToCart = (product, qty = 1) => {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === product.id);

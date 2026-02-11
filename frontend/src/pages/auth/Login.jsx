@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { DEMO_ADMIN, DEMO_USER } from '../../constants';
 
 export default function Login() {
   const [phone, setPhone] = useState('');
@@ -78,8 +79,8 @@ export default function Login() {
 
         <div className="mt-6 p-3 bg-gray-50 rounded text-xs text-gray-500">
           <p className="font-semibold mb-1">Demo Accounts:</p>
-          <p>Admin: 9999999999 / admin@123</p>
-          <p>User: 8888888888 / user@123</p>
+          <p>Admin: {DEMO_ADMIN.phone} / {DEMO_ADMIN.password}</p>
+          <p>User: {DEMO_USER.phone} / {DEMO_USER.password}</p>
         </div>
       </div>
     </div>

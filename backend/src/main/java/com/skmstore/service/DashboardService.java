@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Service
 public class DashboardService {
@@ -35,7 +37,28 @@ public class DashboardService {
         response.setTodayRevenue(orderRepository.getTodaysRevenue(startOfDay, endOfDay));
         response.setTotalProducts(productRepository.count());
         response.setTotalUsers(userRepository.count());
-        response.setPendingOrders(orderRepository.findByStatusOrderByOrderDateDesc(OrderStatus.PENDING).size());
+        response.setPendingOrders(orderRepository.countByStatus(OrderStatus.CONFIRMED));
+
+        return response;
+    }
+
+    public DashboardResponse getStatsByDateRange(LocalDate from, LocalDate to) {
+        LocalDateTime start = from.atStartOfDay();
+        LocalDateTime end = to.atTime(LocalTime.MAX);
+
+        DashboardResponse response = getDashboardStats();
+
+        response.setRangeOrderCount(orderRepository.countOrdersBetween(start, end));
+        response.setRangeRevenue(orderRepository.getRevenueBetween(start, end));
+
+        Map<String, Long> breakdown = new LinkedHashMap<>();
+        for (OrderStatus status : OrderStatus.values()) {
+            long count = orderRepository.countByStatusBetween(start, end, status);
+            if (count > 0) {
+                breakdown.put(status.name(), count);
+            }
+        }
+        response.setStatusBreakdown(breakdown);
 
         return response;
     }

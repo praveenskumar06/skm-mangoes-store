@@ -40,11 +40,11 @@ public class Order {
 
     @Column(nullable = false, length = 30)
     @Enumerated(EnumType.STRING)
-    private OrderStatus status = OrderStatus.PENDING;
+    private OrderStatus status = OrderStatus.CONFIRMED;
 
     @Column(name = "payment_status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
-    private PaymentStatus paymentStatus = PaymentStatus.PENDING;
+    private PaymentStatus paymentStatus = PaymentStatus.PAID;
 
     @Size(max = 100)
     @Column(name = "payment_id", length = 100)

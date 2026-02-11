@@ -96,11 +96,12 @@ public class OrderService {
 
         order.setTotalAmount(totalAmount);
 
+        // All orders are confirmed (payment mandatory)
+        order.setStatus(OrderStatus.CONFIRMED);
+        order.setPaymentStatus(PaymentStatus.PAID);
         if (request.getRazorpayPaymentId() != null) {
             order.setPaymentId(request.getRazorpayPaymentId());
             order.setRazorpayOrderId(request.getRazorpayOrderId());
-            order.setPaymentStatus(PaymentStatus.PAID);
-            order.setStatus(OrderStatus.CONFIRMED);
         }
 
         order = orderRepository.save(order);
@@ -116,6 +117,15 @@ public class OrderService {
     public List<OrderResponse> getTodaysOrders() {
         LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
         LocalDateTime endOfDay = LocalDate.now().atTime(LocalTime.MAX);
+        return orderRepository.findTodaysOrders(startOfDay, endOfDay).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<OrderResponse> getOrdersByDate(String dateStr) {
+        LocalDate date = LocalDate.parse(dateStr);
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
         return orderRepository.findTodaysOrders(startOfDay, endOfDay).stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
@@ -156,7 +166,7 @@ public class OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         order.setCourierName(courierName);
         order.setTrackingId(trackingId);
-        if (order.getStatus() == OrderStatus.PENDING || order.getStatus() == OrderStatus.CONFIRMED) {
+        if (order.getStatus() == OrderStatus.CONFIRMED) {
             order.setStatus(OrderStatus.SHIPPED);
         }
         order = orderRepository.save(order);
@@ -164,7 +174,7 @@ public class OrderService {
     }
 
     public OrderResponse getOrder(Long orderId) {
-        Order order = orderRepository.findById(orderId)
+        Order order = orderRepository.findByIdWithDetails(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         return toResponse(order);
     }

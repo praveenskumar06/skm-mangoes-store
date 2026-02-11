@@ -30,8 +30,7 @@ public class ProfileController {
                 "id", user.getId(),
                 "name", user.getName(),
                 "phone", user.getPhone(),
-                "email", user.getEmail() != null ? user.getEmail() : "",
-                "role", user.getRole().name()
+                "email", user.getEmail() != null ? user.getEmail() : ""
         );
         return ResponseEntity.ok(ApiResponse.success("Profile retrieved", profile));
     }

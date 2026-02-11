@@ -30,7 +30,10 @@ function ProductCard({ p, seasonActive }) {
         <div className="h-48 bg-yellow-50 flex items-center justify-center text-7xl group-hover:scale-110 transition-transform relative">
           🥭
           {p.onSale && seasonActive && (
-            <span className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold">SALE</span>
+            <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full font-bold">SALE</span>
+          )}
+          {p.special && seasonActive && (
+            <span className={`absolute top-2 ${p.onSale ? 'left-16' : 'left-2'} bg-yellow-500 text-white text-xs px-2 py-1 rounded-full font-bold`}>⭐ SPECIAL</span>
           )}
           {!seasonActive && (
             <span className="absolute top-2 right-2 bg-gray-500 text-white text-xs px-2 py-1 rounded-full font-bold">SEASON CLOSED</span>

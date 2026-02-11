@@ -5,17 +5,23 @@ const SeasonContext = createContext(null);
 
 export function SeasonProvider({ children }) {
   const [seasonActive, setSeasonActive] = useState(null);
+  const [bannerText, setBannerText] = useState('');
 
   const fetchSeason = () => {
     api.get('/settings/public')
-      .then(({ data }) => setSeasonActive(data?.season_active === 'true'))
+      .then(({ data }) => {
+        setSeasonActive(data?.season_active === 'true');
+        setBannerText(data?.season_banner_text || '');
+      })
       .catch(() => setSeasonActive(false));
   };
 
-  useEffect(() => { fetchSeason(); }, []);
+  useEffect(() => {
+    fetchSeason();
+  }, []);
 
   return (
-    <SeasonContext.Provider value={{ seasonActive, refreshSeason: fetchSeason }}>
+    <SeasonContext.Provider value={{ seasonActive, bannerText, refreshSeason: fetchSeason }}>
       {children}
     </SeasonContext.Provider>
   );

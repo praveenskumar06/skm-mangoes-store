@@ -1,5 +1,6 @@
 package com.skmstore.seed;
 
+import com.skmstore.constants.StoreConstants;
 import com.skmstore.model.*;
 import com.skmstore.repository.*;
 import org.slf4j.Logger;
@@ -74,7 +75,7 @@ public class DataSeeder implements CommandLineRunner {
         return userRepository.findByPhone(adminPhone).orElseGet(() -> {
             User admin = new User(adminName, adminPhone,
                     passwordEncoder.encode(adminPassword), Role.ROLE_ADMIN);
-            admin.setEmail("admin@skmmangoes.com");
+            admin.setEmail(StoreConstants.ADMIN_EMAIL);
             userRepository.save(admin);
             log.info("Admin account created - Phone: {}, Password: {}", adminPhone, adminPassword);
             return admin;
@@ -85,7 +86,7 @@ public class DataSeeder implements CommandLineRunner {
         return userRepository.findByPhone(demoUserPhone).orElseGet(() -> {
             User user = new User(demoUserName, demoUserPhone,
                     passwordEncoder.encode(demoUserPassword), Role.ROLE_USER);
-            user.setEmail("demo@skmmangoes.com");
+            user.setEmail(StoreConstants.DEMO_USER_EMAIL);
             userRepository.save(user);
             log.info("Demo user created - Phone: {}, Password: {}", demoUserPhone, demoUserPassword);
             return user;
@@ -94,9 +95,9 @@ public class DataSeeder implements CommandLineRunner {
 
     private void seedDefaultSettings() {
         seedSetting("season_active", "true");
-        seedSetting("season_banner_text", "Mango Season 2026 is LIVE!");
+        seedSetting("season_banner_text", StoreConstants.DEFAULT_SEASON_BANNER);
         seedSetting("show_tracking_to_customer", "true");
-        seedSetting("delivery_zones", "Tamil Nadu,Pondicherry,Karnataka");
+        seedSetting("delivery_zones", StoreConstants.DEFAULT_DELIVERY_ZONES_CSV);
     }
 
     private void seedSetting(String key, String value) {

@@ -96,13 +96,13 @@ public final class DemoData {
                     List.of(new OrderItemData(1, new BigDecimal("3.00")),
                             new OrderItemData(2, new BigDecimal("3.00")))),
 
-            new OrderData("CONFIRMED", "PENDING", null, null,
+            new OrderData("CONFIRMED", "PAID", null, null,
                     List.of(new OrderItemData(3, new BigDecimal("4.00")))),
 
-            new OrderData("PENDING", "PENDING", null, null,
+            new OrderData("CONFIRMED", "PAID", null, null,
                     List.of(new OrderItemData(4, new BigDecimal("10.00")))),
 
-            new OrderData("PENDING", "PENDING", null, null,
+            new OrderData("CONFIRMED", "PAID", null, null,
                     List.of(new OrderItemData(0, new BigDecimal("3.00")),
                             new OrderItemData(5, new BigDecimal("5.00"))))
     );

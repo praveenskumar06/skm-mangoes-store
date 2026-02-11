@@ -3,7 +3,6 @@ import api from '../../services/api';
 import Loader from '../../components/common/Loader';
 
 const STATUS_COLORS = {
-  PENDING: 'bg-blue-100 text-blue-800',
   CONFIRMED: 'bg-yellow-100 text-yellow-800',
   SHIPPED: 'bg-purple-100 text-purple-800',
   OUT_FOR_DELIVERY: 'bg-indigo-100 text-indigo-800',

@@ -14,7 +14,7 @@ export default function ProductManagement() {
   const [error, setError] = useState('');
 
   const loadProducts = () => {
-    api.get('/products')
+    api.get('/admin/products')
       .then(({ data }) => setProducts(data))
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -73,6 +73,24 @@ export default function ProductManagement() {
     }
   };
 
+  const handleToggleActive = async (id) => {
+    try {
+      const { data } = await api.put(`/admin/products/${id}/toggle-active`);
+      setProducts(products.map((p) => (p.id === id ? data : p)));
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to toggle status');
+    }
+  };
+
+  const handleToggleSpecial = async (id) => {
+    try {
+      const { data } = await api.put(`/admin/products/${id}/toggle-special`);
+      setProducts(products.map((p) => (p.id === id ? data : p)));
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to toggle special');
+    }
+  };
+
   if (loading) return <Loader />;
 
   return (
@@ -127,6 +145,7 @@ export default function ProductManagement() {
               <th className="text-right p-3">Sale</th>
               <th className="text-right p-3">Stock (kg)</th>
               <th className="text-center p-3">Active</th>
+              <th className="text-center p-3">Special</th>
               <th className="text-right p-3">Actions</th>
             </tr>
           </thead>
@@ -139,7 +158,18 @@ export default function ProductManagement() {
                 <td className="p-3 text-right">
                   <span className={p.inStock ? 'text-green-600' : 'text-red-600'}>{p.stockKg}</span>
                 </td>
-                <td className="p-3 text-center">{p.active ? '✅' : '❌'}</td>
+                <td className="p-3 text-center">
+                  <button onClick={() => handleToggleActive(p.id)}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold transition ${p.active ? 'bg-green-100 text-green-700 hover:bg-red-100 hover:text-red-700' : 'bg-red-100 text-red-700 hover:bg-green-100 hover:text-green-700'}`}>
+                    {p.active ? '✅ Active' : '❌ Inactive'}
+                  </button>
+                </td>
+                <td className="p-3 text-center">
+                  <button onClick={() => handleToggleSpecial(p.id)}
+                    className={`px-3 py-1 rounded-full text-xs font-semibold transition ${p.special ? 'bg-yellow-100 text-yellow-800 hover:bg-gray-100 hover:text-gray-600' : 'bg-gray-100 text-gray-500 hover:bg-yellow-100 hover:text-yellow-800'}`}>
+                    {p.special ? '⭐ Special' : '— Normal'}
+                  </button>
+                </td>
                 <td className="p-3 text-right space-x-2">
                   <button onClick={() => handleEdit(p)} className="text-blue-600 hover:underline">Edit</button>
                   <button onClick={() => handleDelete(p.id)} className="text-red-600 hover:underline">Delete</button>

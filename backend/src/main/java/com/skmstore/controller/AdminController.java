@@ -46,6 +46,16 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.success("Dashboard data", dashboard));
     }
 
+    @GetMapping("/dashboard/range")
+    public ResponseEntity<ApiResponse> getDashboardByRange(
+            @RequestParam("from") String from,
+            @RequestParam("to") String to) {
+        java.time.LocalDate fromDate = java.time.LocalDate.parse(from);
+        java.time.LocalDate toDate = java.time.LocalDate.parse(to);
+        DashboardResponse dashboard = dashboardService.getStatsByDateRange(fromDate, toDate);
+        return ResponseEntity.ok(ApiResponse.success("Dashboard data for range", dashboard));
+    }
+
     // ==================== PRODUCTS ====================
 
     @GetMapping("/products")
@@ -74,6 +84,20 @@ public class AdminController {
         return ResponseEntity.ok(ApiResponse.success("Product deactivated"));
     }
 
+    @PutMapping("/products/{id}/toggle-active")
+    public ResponseEntity<ApiResponse> toggleProductActive(@PathVariable Long id) {
+        ProductResponse product = productService.toggleActive(id);
+        return ResponseEntity.ok(ApiResponse.success(
+                product.isActive() ? "Product activated" : "Product deactivated", product));
+    }
+
+    @PutMapping("/products/{id}/toggle-special")
+    public ResponseEntity<ApiResponse> toggleProductSpecial(@PathVariable Long id) {
+        ProductResponse product = productService.toggleSpecial(id);
+        return ResponseEntity.ok(ApiResponse.success(
+                product.isSpecial() ? "Product marked as special" : "Product unmarked as special", product));
+    }
+
     // ==================== ORDERS ====================
 
     @GetMapping("/orders")
@@ -98,6 +122,17 @@ public class AdminController {
             orders = orderService.getTodaysOrders();
         }
         return ResponseEntity.ok(ApiResponse.success("Today's orders", orders));
+    }
+
+    @GetMapping("/orders/by-date")
+    public ResponseEntity<ApiResponse> getOrdersByDate(@RequestParam String date) {
+        List<OrderResponse> orders = orderService.getOrdersByDate(date);
+        return ResponseEntity.ok(ApiResponse.success("Orders for " + date, orders));
+    }
+
+    @GetMapping("/orders/by-date/export")
+    public ResponseEntity<String> exportOrdersByDate(@RequestParam String date) {
+        return exportOrdersCsv(orderService.getOrdersByDate(date), "orders-" + date + ".csv");
     }
 
     @GetMapping("/orders/{id}")
@@ -126,21 +161,40 @@ public class AdminController {
 
     @GetMapping("/orders/today/export")
     public ResponseEntity<String> exportTodaysOrders() {
-        List<OrderResponse> orders = orderService.getTodaysOrders();
+        return exportOrdersCsv(orderService.getTodaysOrders(), "orders-today.csv");
+    }
+
+    @GetMapping("/orders/export")
+    public ResponseEntity<String> exportAllOrders() {
+        return exportOrdersCsv(orderService.getAllOrders(), "orders-all.csv");
+    }
+
+    private ResponseEntity<String> exportOrdersCsv(List<OrderResponse> orders, String filename) {
         StringBuilder csv = new StringBuilder();
-        csv.append("Order ID,Customer,Phone,City,State,Items,Total,Status,Courier,Tracking\n");
+        csv.append("Order ID,Date,Customer,Phone,Full Address,City,State,Pincode,Items,Total,Status,Courier,Tracking\n");
 
         for (OrderResponse order : orders) {
             String items = order.getItems().stream()
                     .map(i -> i.getProductName() + " " + i.getQuantityKg() + "kg")
                     .collect(Collectors.joining(" | "));
 
-            csv.append(String.format("%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%.2f,%s,\"%s\",\"%s\"\n",
+            OrderResponse.AddressInfo addr = order.getAddress();
+            String fullAddress = String.join(", ",
+                    addr.getFullName() != null ? addr.getFullName() : "",
+                    addr.getAddressLine() != null ? addr.getAddressLine() : "",
+                    addr.getCity() != null ? addr.getCity() : "",
+                    addr.getState() != null ? addr.getState() : "",
+                    addr.getPincode() != null ? addr.getPincode() : "");
+
+            csv.append(String.format("%d,\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%.2f,%s,\"%s\",\"%s\"\n",
                     order.getId(),
+                    order.getOrderDate() != null ? order.getOrderDate().toString() : "",
                     order.getCustomer().getName(),
                     order.getCustomer().getPhone(),
-                    order.getAddress().getCity(),
-                    order.getAddress().getState(),
+                    fullAddress,
+                    addr.getCity() != null ? addr.getCity() : "",
+                    addr.getState() != null ? addr.getState() : "",
+                    addr.getPincode() != null ? addr.getPincode() : "",
                     items,
                     order.getTotalAmount(),
                     order.getStatus(),
@@ -150,7 +204,7 @@ public class AdminController {
 
         return ResponseEntity.ok()
                 .header("Content-Type", "text/csv")
-                .header("Content-Disposition", "attachment; filename=orders-today.csv")
+                .header("Content-Disposition", "attachment; filename=" + filename)
                 .body(csv.toString());
     }
 

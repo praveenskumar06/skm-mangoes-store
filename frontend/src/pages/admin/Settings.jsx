@@ -23,9 +23,7 @@ export default function Settings() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      for (const [key, value] of Object.entries(settings)) {
-        await api.put('/admin/settings', { key, value });
-      }
+      await api.put('/admin/settings', settings);
       alert('Settings saved successfully!');
       refreshSeason();
     } catch (err) {
@@ -38,6 +36,14 @@ export default function Settings() {
   if (loading) return <Loader />;
 
   const seasonActive = settings.season_active;
+
+  const settingLabels = {
+    season_banner_text: '🏷️ Season Banner Text',
+    show_tracking_to_customer: '📦 Show Tracking to Customer',
+    delivery_zones: '🚚 Delivery Zones',
+  };
+
+  const isToggleSetting = (key) => key === 'show_tracking_to_customer';
 
   return (
     <div>
@@ -57,14 +63,17 @@ export default function Settings() {
                 </p>
               </div>
               <button
+                type="button"
                 onClick={() => handleChange('season_active', seasonActive === 'true' ? 'false' : 'true')}
-                className={`relative w-14 h-7 rounded-full transition ${
+                className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ${
                   seasonActive === 'true' ? 'bg-green-600' : 'bg-gray-300'
                 }`}
               >
-                <span className={`absolute top-0.5 w-6 h-6 bg-white rounded-full shadow transition-transform ${
-                  seasonActive === 'true' ? 'translate-x-7' : 'translate-x-0.5'
-                }`} />
+                <span
+                  className={`pointer-events-none inline-block h-6 w-6 rounded-full bg-white shadow ring-0 transition-transform duration-200 ${
+                    seasonActive === 'true' ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
               </button>
             </div>
           </div>
@@ -72,16 +81,34 @@ export default function Settings() {
 
         {/* Other Settings */}
         <div className="space-y-4">
-          {Object.entries(settings).filter(([key]) => key !== 'season_active').map(([key, value]) => (
-            <div key={key} className="flex items-center justify-between py-2 border-b">
-              <label className="text-gray-700 capitalize font-medium">
-                {key.replace(/_/g, ' ')}
+          {Object.entries(settings)
+            .filter(([key]) => key !== 'season_active' && settingLabels[key])
+            .map(([key, value]) => (
+            <div key={key} className="flex items-center justify-between py-3 border-b">
+              <label className="text-gray-700 font-medium">
+                {settingLabels[key]}
               </label>
-              <input
-                value={value}
-                onChange={(e) => handleChange(key, e.target.value)}
-                className="px-3 py-1 border rounded-lg outline-none focus:ring-2 focus:ring-green-500 w-48 text-right"
-              />
+              {isToggleSetting(key) ? (
+                <button
+                  type="button"
+                  onClick={() => handleChange(key, value === 'true' ? 'false' : 'true')}
+                  className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ${
+                    value === 'true' ? 'bg-green-600' : 'bg-gray-300'
+                  }`}
+                >
+                  <span
+                    className={`pointer-events-none inline-block h-6 w-6 rounded-full bg-white shadow ring-0 transition-transform duration-200 ${
+                      value === 'true' ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                  />
+                </button>
+              ) : (
+                <input
+                  value={value}
+                  onChange={(e) => handleChange(key, e.target.value)}
+                  className="px-3 py-1.5 border rounded-lg outline-none focus:ring-2 focus:ring-green-500 w-64 text-right"
+                />
+              )}
             </div>
           ))}
         </div>

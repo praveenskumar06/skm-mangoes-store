@@ -77,6 +77,22 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    @Transactional
+    public ProductResponse toggleActive(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        product.setActive(!product.getActive());
+        return toResponse(productRepository.save(product));
+    }
+
+    @Transactional
+    public ProductResponse toggleSpecial(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+        product.setSpecial(!Boolean.TRUE.equals(product.getSpecial()));
+        return toResponse(productRepository.save(product));
+    }
+
     public List<ProductResponse> searchProducts(String query) {
         return productRepository.findByNameContainingIgnoreCaseAndActiveTrue(query).stream()
                 .map(this::toResponse)
@@ -114,6 +130,7 @@ public class ProductService {
         response.setMinOrderKg(product.getMinOrderKg());
         response.setInStock(product.isInStock());
         response.setActive(product.getActive());
+        response.setSpecial(Boolean.TRUE.equals(product.getSpecial()));
 
         Map<String, String> attrs = new HashMap<>();
         if (product.getAttributes() != null) {

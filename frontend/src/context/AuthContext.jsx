@@ -19,6 +19,8 @@ export function AuthProvider({ children }) {
     const { data } = await api.post('/auth/login', { phone, password });
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data));
+    localStorage.removeItem('cart');
+    window.dispatchEvent(new Event('cart-clear'));
     setUser(data);
     return data;
   };
@@ -27,6 +29,8 @@ export function AuthProvider({ children }) {
     const { data } = await api.post('/auth/register', { name, phone, password });
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data));
+    localStorage.removeItem('cart');
+    window.dispatchEvent(new Event('cart-clear'));
     setUser(data);
     return data;
   };
@@ -34,6 +38,8 @@ export function AuthProvider({ children }) {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('cart');
+    window.dispatchEvent(new Event('cart-clear'));
     setUser(null);
   };
 
