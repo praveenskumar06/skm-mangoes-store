@@ -77,8 +77,12 @@ public class Order {
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
-        this.orderDate = now;
-        this.updatedAt = now;
+        if (this.orderDate == null) {
+            this.orderDate = now;
+        }
+        if (this.updatedAt == null) {
+            this.updatedAt = now;
+        }
     }
 
     @PreUpdate

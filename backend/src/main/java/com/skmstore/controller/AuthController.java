@@ -1,5 +1,6 @@
 package com.skmstore.controller;
 
+import com.skmstore.dto.request.GoogleAuthRequest;
 import com.skmstore.dto.request.LoginRequest;
 import com.skmstore.dto.request.RegisterRequest;
 import com.skmstore.dto.response.ApiResponse;
@@ -29,5 +30,11 @@ public class AuthController {
     public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse authResponse = authService.login(request);
         return ResponseEntity.ok(ApiResponse.success("Login successful", authResponse));
+    }
+
+    @PostMapping("/google")
+    public ResponseEntity<ApiResponse> googleLogin(@Valid @RequestBody GoogleAuthRequest request) {
+        AuthResponse authResponse = authService.googleLogin(request);
+        return ResponseEntity.ok(ApiResponse.success("Google login successful", authResponse));
     }
 }

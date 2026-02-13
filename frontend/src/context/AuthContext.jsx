@@ -25,6 +25,16 @@ export function AuthProvider({ children }) {
     return data;
   };
 
+  const googleLogin = async (credential) => {
+    const { data } = await api.post('/auth/google', { credential });
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data));
+    localStorage.removeItem('cart');
+    window.dispatchEvent(new Event('cart-clear'));
+    setUser(data);
+    return data;
+  };
+
   const register = async (name, phone, password) => {
     const { data } = await api.post('/auth/register', { name, phone, password });
     localStorage.setItem('token', data.token);
@@ -46,7 +56,7 @@ export function AuthProvider({ children }) {
   const isAdmin = user?.role === 'ROLE_ADMIN';
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading, isAdmin }}>
+    <AuthContext.Provider value={{ user, login, googleLogin, register, logout, loading, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );

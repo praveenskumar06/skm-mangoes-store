@@ -213,15 +213,17 @@ public class AdminController {
     @GetMapping("/users")
     public ResponseEntity<ApiResponse> getAllUsers() {
         List<User> users = userService.getAllUsers();
-        List<Map<String, Object>> userList = users.stream().map(u -> Map.<String, Object>of(
-                "id", u.getId(),
-                "name", u.getName(),
-                "phone", u.getPhone(),
-                "email", u.getEmail() != null ? u.getEmail() : "",
-                "role", u.getRole().name(),
-                "active", u.getActive(),
-                "createdAt", u.getCreatedAt().toString()
-        )).collect(Collectors.toList());
+        List<Map<String, Object>> userList = users.stream().map(u -> {
+            Map<String, Object> map = new java.util.HashMap<>();
+            map.put("id", u.getId());
+            map.put("name", u.getName());
+            map.put("phone", u.getPhone() != null ? u.getPhone() : "");
+            map.put("email", u.getEmail() != null ? u.getEmail() : "");
+            map.put("role", u.getRole().name());
+            map.put("active", u.getActive());
+            map.put("createdAt", u.getCreatedAt().toString());
+            return map;
+        }).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success("Users retrieved", userList));
     }
 

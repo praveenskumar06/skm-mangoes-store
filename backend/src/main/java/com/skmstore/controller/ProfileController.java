@@ -26,12 +26,11 @@ public class ProfileController {
             @RequestHeader("Authorization") String authHeader) {
         Long userId = extractUserId(authHeader);
         User user = userService.getUserById(userId);
-        Map<String, Object> profile = Map.of(
-                "id", user.getId(),
-                "name", user.getName(),
-                "phone", user.getPhone(),
-                "email", user.getEmail() != null ? user.getEmail() : ""
-        );
+        Map<String, Object> profile = new java.util.HashMap<>();
+        profile.put("id", user.getId());
+        profile.put("name", user.getName());
+        profile.put("phone", user.getPhone() != null ? user.getPhone() : "");
+        profile.put("email", user.getEmail() != null ? user.getEmail() : "");
         return ResponseEntity.ok(ApiResponse.success("Profile retrieved", profile));
     }
 

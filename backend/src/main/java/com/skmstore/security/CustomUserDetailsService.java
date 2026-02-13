@@ -20,16 +20,18 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
-        User user = userRepository.findByPhone(phone)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with phone: " + phone));
+    public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
+        // Try phone first, then email (for Google OAuth users without phone)
+        User user = userRepository.findByPhone(identifier)
+                .or(() -> userRepository.findByEmail(identifier))
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + identifier));
 
         if (!user.getActive()) {
             throw new UsernameNotFoundException("User account is deactivated");
         }
 
         return new org.springframework.security.core.userdetails.User(
-                user.getPhone(),
+                user.getPhone() != null ? user.getPhone() : user.getEmail(),
                 user.getPassword() != null ? user.getPassword() : "",
                 Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()))
         );

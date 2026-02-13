@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { GOOGLE_CLIENT_ID } from '../../constants';
 
 export default function Register() {
   const [name, setName] = useState('');
@@ -9,8 +10,34 @@ export default function Register() {
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const { register, googleLogin } = useAuth();
   const navigate = useNavigate();
+
+  const handleGoogleResponse = useCallback(async (response) => {
+    setError('');
+    setLoading(true);
+    try {
+      await googleLogin(response.credential);
+      navigate('/');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Google sign-up failed');
+    } finally {
+      setLoading(false);
+    }
+  }, [googleLogin, navigate]);
+
+  useEffect(() => {
+    if (window.google) {
+      window.google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleResponse,
+      });
+      window.google.accounts.id.renderButton(
+        document.getElementById('google-signup-btn'),
+        { theme: 'outline', size: 'large', width: '100%', text: 'signup_with' }
+      );
+    }
+  }, [handleGoogleResponse]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -101,6 +128,17 @@ export default function Register() {
             {loading ? 'Creating account...' : 'Register'}
           </button>
         </form>
+
+        <div className="relative my-5">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-white px-3 text-gray-500">or</span>
+          </div>
+        </div>
+
+        <div id="google-signup-btn" className="flex justify-center"></div>
 
         <p className="text-center text-sm text-gray-500 mt-4">
           Already have an account?{' '}

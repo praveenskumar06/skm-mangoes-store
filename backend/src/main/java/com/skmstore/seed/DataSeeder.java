@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -183,6 +184,14 @@ public class DataSeeder implements CommandLineRunner {
                 orderTotal = orderTotal.add(price.multiply(oid.quantityKg()));
             }
             order.setTotalAmount(orderTotal);
+
+            // Set historical date before first save (bypasses @PrePersist)
+            if (od.daysAgo() > 0) {
+                LocalDateTime pastDate = LocalDateTime.now().minusDays(od.daysAgo());
+                order.setOrderDate(pastDate);
+                order.setUpdatedAt(pastDate);
+            }
+
             orderRepository.save(order);
             totalRevenue = totalRevenue.add(orderTotal);
         }

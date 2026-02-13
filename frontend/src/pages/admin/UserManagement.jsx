@@ -26,6 +26,7 @@ export default function UserManagement() {
               <th className="text-left p-3">ID</th>
               <th className="text-left p-3">Name</th>
               <th className="text-left p-3">Phone</th>
+              <th className="text-left p-3">Email</th>
               <th className="text-left p-3">Role</th>
               <th className="text-left p-3">Joined</th>
             </tr>
@@ -35,7 +36,8 @@ export default function UserManagement() {
               <tr key={u.id} className="border-t hover:bg-gray-50">
                 <td className="p-3">{u.id}</td>
                 <td className="p-3 font-medium">{u.name}</td>
-                <td className="p-3">{u.phone}</td>
+                <td className="p-3">{u.phone || '—'}</td>
+                <td className="p-3 text-gray-500">{u.email || '—'}</td>
                 <td className="p-3">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                     u.role === 'ROLE_ADMIN' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-700'

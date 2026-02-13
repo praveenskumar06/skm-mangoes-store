@@ -23,6 +23,7 @@ public final class DemoData {
             String paymentStatus,
             String courierName,
             String trackingId,
+            int daysAgo,
             List<OrderItemData> items
     ) {}
 
@@ -89,20 +90,23 @@ public final class DemoData {
     );
 
     public static final List<OrderData> ORDERS = List.of(
-            new OrderData("DELIVERED", "PAID", "DTDC", "DTDC123456",
+            new OrderData("DELIVERED", "PAID", "DTDC", "DTDC123456", 5,
                     List.of(new OrderItemData(0, new BigDecimal("5.00")))),
 
-            new OrderData("SHIPPED", "PAID", "BlueDart", "BD789012",
+            new OrderData("DELIVERED", "PAID", "BlueDart", "BD654321", 3,
+                    List.of(new OrderItemData(2, new BigDecimal("4.00")))),
+
+            new OrderData("SHIPPED", "PAID", "BlueDart", "BD789012", 1,
                     List.of(new OrderItemData(1, new BigDecimal("3.00")),
                             new OrderItemData(2, new BigDecimal("3.00")))),
 
-            new OrderData("CONFIRMED", "PAID", null, null,
+            new OrderData("CONFIRMED", "PAID", null, null, 1,
                     List.of(new OrderItemData(3, new BigDecimal("4.00")))),
 
-            new OrderData("CONFIRMED", "PAID", null, null,
+            new OrderData("CONFIRMED", "PAID", null, null, 0,
                     List.of(new OrderItemData(4, new BigDecimal("10.00")))),
 
-            new OrderData("CONFIRMED", "PAID", null, null,
+            new OrderData("CONFIRMED", "PAID", null, null, 0,
                     List.of(new OrderItemData(0, new BigDecimal("3.00")),
                             new OrderItemData(5, new BigDecimal("5.00"))))
     );

@@ -29,6 +29,9 @@ export const DEMO_USER = { phone: '8888888888', password: 'user@123' };
 // API
 export const API_BASE_URL = '/api';
 
+// Google OAuth (replace with your Google Cloud Console client ID)
+export const GOOGLE_CLIENT_ID = '709713951478-5ij42t2bqfdk1finil8k0vci9075nvie.apps.googleusercontent.com';
+
 // Social Media & External Links (update before production)
 export const SOCIAL_LINKS = {
   instagram: 'https://instagram.com/skmmangoes',

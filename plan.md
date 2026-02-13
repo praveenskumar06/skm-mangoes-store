@@ -614,3 +614,19 @@ Terminal 2 (right):  cd frontend → npm run dev            (port 5173)
 - **Phone OTP**: Planned for later phase using Firebase free tier (10K verifications/month).
 - **DB connection**: Application uses Spring Data JPA with PostgreSQL driver — switch between Neon and Supabase by changing `application.yml` connection string only.
 - **Payment**: Razorpay has no setup fee. You only pay ~2% per transaction. Register at razorpay.com for API keys.
+
+---
+
+## Known Issues / TODO (Fix Later)
+
+### 🐛 Google OAuth user gets "User not found" on adding address
+- **Cause**: H2 in-memory DB is wiped on backend restart, but the JWT token persists in the browser's localStorage. The userId in the stale JWT no longer exists in the fresh DB.
+- **Steps to reproduce**: Login with Google → backend restarts → try to add address or visit profile → 404 "User not found"
+- **Fix options (pick one or combine)**:
+  1. **Switch H2 to file-based** — change `jdbc:h2:mem:skmstore` → `jdbc:h2:file:./data/skmstore` in `application.properties` so data survives restarts
+  2. **Frontend interceptor** — in `api.js` error interceptor, catch 404 "User not found" alongside 401 → clear localStorage token/user → redirect to `/login`
+  3. **JWT filter DB check** — in `JwtAuthenticationFilter`, verify user exists in DB before setting auth context (adds 1 DB query per request — use cautiously)
+- **Recommended**: Option 1 (file-based H2) + Option 2 (frontend interceptor) for dev. For production, this is a non-issue since PostgreSQL persists data.
+
+### 🔧 CORS fix applied
+- Added `.cors(cors -> cors.configurationSource(...))` to `SecurityConfig` so browser preflight OPTIONS requests aren't blocked with 403 on `/api/admin/**` routes.
