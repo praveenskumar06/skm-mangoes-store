@@ -29,37 +29,52 @@ export default function Cart() {
       <div className="space-y-4">
         {items.map((item) => {
           return (
-            <div key={item.id} className="bg-white rounded-lg shadow p-4 flex items-center gap-4">
-              <div className="text-4xl">🥭</div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-green-800">{item.name}</h3>
-                <p className="text-green-700 font-bold">₹{item.effectivePrice || item.originalPrice} / kg</p>
-              </div>
-              <div className="flex flex-col items-center">
-                <div className="flex items-center border rounded-lg">
-                  <button
-                    onClick={() => {
-                      const minQty = item.minOrderKg || 1;
-                      if (item.quantity - 1 < minQty) return;
-                      updateQuantity(item.id, item.quantity - 1);
-                    }}
-                    className={`px-3 py-1 ${item.quantity <= (item.minOrderKg || 1) ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100'}`}
-                  >−</button>
-                  <span className="px-3 py-1 font-semibold">{item.quantity} kg</span>
-                  <button
-                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    className="px-3 py-1 hover:bg-gray-100"
-                  >+</button>
+            <div key={item.id} className="bg-white rounded-lg shadow p-4 flex flex-wrap items-center gap-x-4 gap-y-3">
+              {/* Product Info - Grows to take space, but allows wrapping */}
+              <div className="flex items-center gap-4 flex-1 min-w-[200px]">
+                <div className="text-4xl shrink-0 w-16 h-16 flex items-center justify-center bg-gray-50 rounded overflow-hidden">
+                  {item.image ? (
+                    <img src={`data:image/jpeg;base64,${item.image}`} alt={item.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span>🥭</span>
+                  )}
                 </div>
-                <span className="text-xs text-gray-400 mt-1">Min: {item.minOrderKg || 1} kg</span>
+                <div>
+                  <h3 className="font-semibold text-green-800">{item.name}</h3>
+                  <p className="text-green-700 font-bold">₹{item.effectivePrice || item.originalPrice} / kg</p>
+                </div>
               </div>
-              <div className="text-right min-w-[80px]">
-                <p className="font-bold text-green-700">₹{(item.effectivePrice || item.originalPrice) * item.quantity}</p>
+
+              {/* Controls and Actions - Wraps as a group if needed */}
+              <div className="flex items-center gap-4 ml-auto sm:ml-0">
+                <div className="flex flex-col items-center">
+                  <div className="flex items-center border rounded-lg bg-white overflow-hidden">
+                    <button
+                      onClick={() => {
+                        const minQty = item.minOrderKg || 1;
+                        if (item.quantity - 1 < minQty) return;
+                        updateQuantity(item.id, item.quantity - 1);
+                      }}
+                      className={`px-3 py-1 ${item.quantity <= (item.minOrderKg || 1) ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+                    >−</button>
+                    <span className="px-3 py-1 font-semibold whitespace-nowrap">{item.quantity} kg</span>
+                    <button
+                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                      className="px-3 py-1 hover:bg-gray-100"
+                    >+</button>
+                  </div>
+                  <span className="text-xs text-gray-400 mt-1">Min: {item.minOrderKg || 1} kg</span>
+                </div>
+
+                <div className="text-right min-w-[80px]">
+                  <p className="font-bold text-green-700 text-lg">₹{(item.effectivePrice || item.originalPrice) * item.quantity}</p>
+                </div>
+
+                <button
+                  onClick={() => removeFromCart(item.id)}
+                  className="text-red-300 hover:text-red-600 text-2xl p-1"
+                >×</button>
               </div>
-              <button
-                onClick={() => removeFromCart(item.id)}
-                className="text-red-400 hover:text-red-600 text-xl"
-              >×</button>
             </div>
           );
         })}

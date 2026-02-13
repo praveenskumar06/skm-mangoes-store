@@ -12,7 +12,7 @@ public class ProductResponse {
     private BigDecimal salePrice;
     private BigDecimal effectivePrice;
     private boolean onSale;
-    private String imageUrl;
+    private byte[] image;
     private BigDecimal stockKg;
     private BigDecimal minOrderKg;
     private boolean inStock;
@@ -23,45 +23,115 @@ public class ProductResponse {
     public ProductResponse() {
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getName() {
+        return name;
+    }
 
-    public BigDecimal getOriginalPrice() { return originalPrice; }
-    public void setOriginalPrice(BigDecimal originalPrice) { this.originalPrice = originalPrice; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public BigDecimal getSalePrice() { return salePrice; }
-    public void setSalePrice(BigDecimal salePrice) { this.salePrice = salePrice; }
+    public String getDescription() {
+        return description;
+    }
 
-    public BigDecimal getEffectivePrice() { return effectivePrice; }
-    public void setEffectivePrice(BigDecimal effectivePrice) { this.effectivePrice = effectivePrice; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public boolean isOnSale() { return onSale; }
-    public void setOnSale(boolean onSale) { this.onSale = onSale; }
+    public BigDecimal getOriginalPrice() {
+        return originalPrice;
+    }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setOriginalPrice(BigDecimal originalPrice) {
+        this.originalPrice = originalPrice;
+    }
 
-    public BigDecimal getStockKg() { return stockKg; }
-    public void setStockKg(BigDecimal stockKg) { this.stockKg = stockKg; }
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
 
-    public BigDecimal getMinOrderKg() { return minOrderKg; }
-    public void setMinOrderKg(BigDecimal minOrderKg) { this.minOrderKg = minOrderKg; }
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = salePrice;
+    }
 
-    public boolean isInStock() { return inStock; }
-    public void setInStock(boolean inStock) { this.inStock = inStock; }
+    public BigDecimal getEffectivePrice() {
+        return effectivePrice;
+    }
 
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public void setEffectivePrice(BigDecimal effectivePrice) {
+        this.effectivePrice = effectivePrice;
+    }
 
-    public boolean isSpecial() { return special; }
-    public void setSpecial(boolean special) { this.special = special; }
+    public boolean isOnSale() {
+        return onSale;
+    }
 
-    public Map<String, String> getAttributes() { return attributes; }
-    public void setAttributes(Map<String, String> attributes) { this.attributes = attributes; }
+    public void setOnSale(boolean onSale) {
+        this.onSale = onSale;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public BigDecimal getStockKg() {
+        return stockKg;
+    }
+
+    public void setStockKg(BigDecimal stockKg) {
+        this.stockKg = stockKg;
+    }
+
+    public BigDecimal getMinOrderKg() {
+        return minOrderKg;
+    }
+
+    public void setMinOrderKg(BigDecimal minOrderKg) {
+        this.minOrderKg = minOrderKg;
+    }
+
+    public boolean isInStock() {
+        return inStock;
+    }
+
+    public void setInStock(boolean inStock) {
+        this.inStock = inStock;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean isSpecial() {
+        return special;
+    }
+
+    public void setSpecial(boolean special) {
+        this.special = special;
+    }
+
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
 }

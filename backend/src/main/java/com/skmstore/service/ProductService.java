@@ -104,7 +104,7 @@ public class ProductService {
         product.setDescription(request.getDescription());
         product.setOriginalPrice(request.getOriginalPrice());
         product.setSalePrice(request.getSalePrice());
-        product.setImageUrl(request.getImageUrl());
+        product.setImage(request.getImage());
         product.setStockKg(request.getStockKg());
         product.setMinOrderKg(request.getMinOrderKg());
 
@@ -125,7 +125,7 @@ public class ProductService {
         response.setSalePrice(product.getSalePrice());
         response.setEffectivePrice(product.getEffectivePrice());
         response.setOnSale(product.isOnSale());
-        response.setImageUrl(product.getImageUrl());
+        response.setImage(product.getImage());
         response.setStockKg(product.getStockKg());
         response.setMinOrderKg(product.getMinOrderKg());
         response.setInStock(product.isInStock());

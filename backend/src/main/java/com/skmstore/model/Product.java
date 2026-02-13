@@ -12,8 +12,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "products", indexes = {
-    @Index(name = "idx_product_active", columnList = "active"),
-    @Index(name = "idx_product_name", columnList = "name")
+        @Index(name = "idx_product_active", columnList = "active"),
+        @Index(name = "idx_product_name", columnList = "name")
 })
 public class Product {
 
@@ -38,9 +38,11 @@ public class Product {
     @Column(name = "sale_price", precision = 10, scale = 2)
     private BigDecimal salePrice;
 
-    @Size(max = 500)
-    @Column(name = "image_url", length = 500)
-    private String imageUrl;
+    @Lob
+    @Column(name = "image", columnDefinition = "BLOB") // Using BLOB for H2 compatibility, Postgres will likely need
+                                                       // BYTEA or OID, but standard Hibernate usually handles byte[]
+                                                       // well.
+    private byte[] image;
 
     @NotNull
     @DecimalMin(value = "0.00")
@@ -83,7 +85,8 @@ public class Product {
     }
 
     /**
-     * Returns the effective selling price (salePrice if set and less than original, otherwise originalPrice).
+     * Returns the effective selling price (salePrice if set and less than original,
+     * otherwise originalPrice).
      */
     public BigDecimal getEffectivePrice() {
         if (salePrice != null && salePrice.compareTo(originalPrice) < 0) {
@@ -100,42 +103,107 @@ public class Product {
         return stockKg.compareTo(minOrderKg) >= 0;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getName() {
+        return name;
+    }
 
-    public BigDecimal getOriginalPrice() { return originalPrice; }
-    public void setOriginalPrice(BigDecimal originalPrice) { this.originalPrice = originalPrice; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public BigDecimal getSalePrice() { return salePrice; }
-    public void setSalePrice(BigDecimal salePrice) { this.salePrice = salePrice; }
+    public String getDescription() {
+        return description;
+    }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public BigDecimal getStockKg() { return stockKg; }
-    public void setStockKg(BigDecimal stockKg) { this.stockKg = stockKg; }
+    public BigDecimal getOriginalPrice() {
+        return originalPrice;
+    }
 
-    public BigDecimal getMinOrderKg() { return minOrderKg; }
-    public void setMinOrderKg(BigDecimal minOrderKg) { this.minOrderKg = minOrderKg; }
+    public void setOriginalPrice(BigDecimal originalPrice) {
+        this.originalPrice = originalPrice;
+    }
 
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
 
-    public Boolean getSpecial() { return special; }
-    public void setSpecial(Boolean special) { this.special = special; }
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = salePrice;
+    }
 
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public byte[] getImage() {
+        return image;
+    }
 
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
-    public List<ProductAttribute> getAttributes() { return attributes; }
-    public void setAttributes(List<ProductAttribute> attributes) { this.attributes = attributes; }
+    public BigDecimal getStockKg() {
+        return stockKg;
+    }
+
+    public void setStockKg(BigDecimal stockKg) {
+        this.stockKg = stockKg;
+    }
+
+    public BigDecimal getMinOrderKg() {
+        return minOrderKg;
+    }
+
+    public void setMinOrderKg(BigDecimal minOrderKg) {
+        this.minOrderKg = minOrderKg;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Boolean getSpecial() {
+        return special;
+    }
+
+    public void setSpecial(Boolean special) {
+        this.special = special;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<ProductAttribute> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<ProductAttribute> attributes) {
+        this.attributes = attributes;
+    }
 }

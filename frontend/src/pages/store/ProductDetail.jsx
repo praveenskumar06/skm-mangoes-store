@@ -51,8 +51,16 @@ export default function ProductDetail() {
       </button>
 
       <div className="bg-white rounded-xl shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2 gap-0">
-        <div className="bg-yellow-50 flex items-center justify-center text-9xl py-16">
-          🥭
+        <div className="bg-yellow-50 flex items-center justify-center text-9xl py-16 min-h-[400px]">
+          {product.image ? (
+            <img
+              src={`data:image/jpeg;base64,${product.image}`}
+              alt={product.name}
+              className="w-full h-full object-cover max-h-[500px]"
+            />
+          ) : (
+            <span>🥭</span>
+          )}
         </div>
         <div className="p-8">
           <h1 className="text-3xl font-bold text-green-800 mb-1">{product.name}</h1>
@@ -110,13 +118,25 @@ export default function ProductDetail() {
               </div>
               <button
                 onClick={handleAddToCart}
-                className={`flex-1 py-2 rounded-lg font-semibold transition ${
-                  added
-                    ? 'bg-green-600 text-white'
-                    : 'bg-yellow-400 text-green-900 hover:bg-yellow-300'
-                }`}
+                className={`flex-1 py-2 rounded-lg font-semibold transition ${added
+                  ? 'bg-green-600 text-white'
+                  : 'bg-yellow-400 text-green-900 hover:bg-yellow-300'
+                  }`}
               >
-                {added ? '✅ Added to Cart!' : '🛒 Add to Cart'}
+                {added ? '✅ Added!' : '🛒 Add to Cart'}
+              </button>
+              <button
+                onClick={() => {
+                  if (!user) {
+                    navigate('/login');
+                    return;
+                  }
+                  addToCart(product, qty);
+                  navigate('/checkout');
+                }}
+                className="flex-1 py-2 rounded-lg font-semibold bg-orange-500 text-white hover:bg-orange-600 transition"
+              >
+                ⚡ Buy Now
               </button>
             </div>
           ) : !seasonActive ? (

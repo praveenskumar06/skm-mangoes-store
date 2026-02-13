@@ -9,21 +9,21 @@ export default function ProductManagement() {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({
     name: '', description: '', originalPrice: '',
-    salePrice: '', stockKg: '', minOrderKg: '1', attributes: {},
+    salePrice: '', stockKg: '', minOrderKg: '1', attributes: {}, image: '',
   });
   const [error, setError] = useState('');
 
   const loadProducts = () => {
     api.get('/admin/products')
       .then(({ data }) => setProducts(data))
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false));
   };
 
   useEffect(loadProducts, []);
 
   const resetForm = () => {
-    setForm({ name: '', description: '', originalPrice: '', salePrice: '', stockKg: '', minOrderKg: '1', attributes: {} });
+    setForm({ name: '', description: '', originalPrice: '', salePrice: '', stockKg: '', minOrderKg: '1', attributes: {}, image: '' });
     setEditing(null);
     setShowForm(false);
     setError('');
@@ -34,6 +34,7 @@ export default function ProductManagement() {
       name: p.name, description: p.description || '',
       originalPrice: p.originalPrice, salePrice: p.salePrice || '',
       stockKg: p.stockKg, minOrderKg: p.minOrderKg || '1', attributes: p.attributes || {},
+      image: p.image || '',
     });
     setEditing(p.id);
     setShowForm(true);
@@ -126,6 +127,36 @@ export default function ProductManagement() {
             <input placeholder="Min Order (kg)" type="number" step="0.1" value={form.minOrderKg}
               onChange={(e) => setForm({ ...form, minOrderKg: e.target.value })}
               className="px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-green-500" />
+
+
+
+            {/* Image Upload */}
+            <div className="border rounded-lg p-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">Product Image (Max 500KB)</label>
+              <input type="file" accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    if (file.size > 500 * 1024) {
+                      setError("File size exceeds 500KB");
+                      return;
+                    }
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      // Strip the prefix to store only raw base64 data
+                      const base64String = reader.result.replace('data:', '').replace(/^.+,/, '');
+                      setForm({ ...form, image: base64String });
+                    };
+                    reader.readAsDataURL(file);
+                  }
+                }}
+                className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100" />
+              {form.image && (
+                <div className="mt-2">
+                  <img src={`data:image/jpeg;base64,${form.image}`} alt="Preview" className="h-20 w-20 object-cover rounded shadow" />
+                </div>
+              )}
+            </div>
           </div>
           <textarea placeholder="Description" value={form.description} rows={3}
             onChange={(e) => setForm({ ...form, description: e.target.value })}

@@ -22,8 +22,7 @@ public class ProductRequest {
     @DecimalMin(value = "0.01", message = "Sale price must be greater than 0")
     private BigDecimal salePrice;
 
-    @Size(max = 500)
-    private String imageUrl;
+    private byte[] image;
 
     @NotNull(message = "Stock is required")
     @DecimalMin(value = "0.00")
@@ -37,27 +36,67 @@ public class ProductRequest {
     public ProductRequest() {
     }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public BigDecimal getOriginalPrice() { return originalPrice; }
-    public void setOriginalPrice(BigDecimal originalPrice) { this.originalPrice = originalPrice; }
+    public String getDescription() {
+        return description;
+    }
 
-    public BigDecimal getSalePrice() { return salePrice; }
-    public void setSalePrice(BigDecimal salePrice) { this.salePrice = salePrice; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public BigDecimal getOriginalPrice() {
+        return originalPrice;
+    }
 
-    public BigDecimal getStockKg() { return stockKg; }
-    public void setStockKg(BigDecimal stockKg) { this.stockKg = stockKg; }
+    public void setOriginalPrice(BigDecimal originalPrice) {
+        this.originalPrice = originalPrice;
+    }
 
-    public BigDecimal getMinOrderKg() { return minOrderKg; }
-    public void setMinOrderKg(BigDecimal minOrderKg) { this.minOrderKg = minOrderKg; }
+    public BigDecimal getSalePrice() {
+        return salePrice;
+    }
 
-    public Map<String, String> getAttributes() { return attributes; }
-    public void setAttributes(Map<String, String> attributes) { this.attributes = attributes; }
+    public void setSalePrice(BigDecimal salePrice) {
+        this.salePrice = salePrice;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public BigDecimal getStockKg() {
+        return stockKg;
+    }
+
+    public void setStockKg(BigDecimal stockKg) {
+        this.stockKg = stockKg;
+    }
+
+    public BigDecimal getMinOrderKg() {
+        return minOrderKg;
+    }
+
+    public void setMinOrderKg(BigDecimal minOrderKg) {
+        this.minOrderKg = minOrderKg;
+    }
+
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
 }
