@@ -35,16 +35,23 @@ export default function Cart() {
                 <h3 className="font-semibold text-green-800">{item.name}</h3>
                 <p className="text-green-700 font-bold">₹{item.effectivePrice || item.originalPrice} / kg</p>
               </div>
-              <div className="flex items-center border rounded-lg">
-                <button
-                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                  className="px-3 py-1 hover:bg-gray-100"
-                >−</button>
-                <span className="px-3 py-1 font-semibold">{item.quantity}</span>
-                <button
-                  onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                  className="px-3 py-1 hover:bg-gray-100"
-                >+</button>
+              <div className="flex flex-col items-center">
+                <div className="flex items-center border rounded-lg">
+                  <button
+                    onClick={() => {
+                      const minQty = item.minOrderKg || 1;
+                      if (item.quantity - 1 < minQty) return;
+                      updateQuantity(item.id, item.quantity - 1);
+                    }}
+                    className={`px-3 py-1 ${item.quantity <= (item.minOrderKg || 1) ? 'text-gray-300 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+                  >−</button>
+                  <span className="px-3 py-1 font-semibold">{item.quantity} kg</span>
+                  <button
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                    className="px-3 py-1 hover:bg-gray-100"
+                  >+</button>
+                </div>
+                <span className="text-xs text-gray-400 mt-1">Min: {item.minOrderKg || 1} kg</span>
               </div>
               <div className="text-right min-w-[80px]">
                 <p className="font-bold text-green-700">₹{(item.effectivePrice || item.originalPrice) * item.quantity}</p>
@@ -73,14 +80,23 @@ export default function Cart() {
             </button>
           </div>
         ) : (
-          <Link
-            to="/checkout"
-            className="block text-center bg-yellow-400 text-green-900 py-3 rounded-lg font-bold hover:bg-yellow-300 transition"
-          >
-            Proceed to Checkout →
-          </Link>
+          <div className="flex gap-3">
+            <Link
+              to="/products"
+              className="flex-1 block text-center border-2 border-green-700 text-green-700 py-3 rounded-lg font-bold hover:bg-green-50 transition"
+            >
+              ← Continue Shopping
+            </Link>
+            <Link
+              to="/checkout"
+              className="flex-1 block text-center bg-yellow-400 text-green-900 py-3 rounded-lg font-bold hover:bg-yellow-300 transition"
+            >
+              Proceed to Checkout →
+            </Link>
+          </div>
         )}
       </div>
     </div>
   );
 }
+
