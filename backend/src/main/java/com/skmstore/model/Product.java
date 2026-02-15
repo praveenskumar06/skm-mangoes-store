@@ -39,9 +39,7 @@ public class Product {
     private BigDecimal salePrice;
 
     @Lob
-    @Column(name = "image", columnDefinition = "BLOB") // Using BLOB for H2 compatibility, Postgres will likely need
-                                                       // BYTEA or OID, but standard Hibernate usually handles byte[]
-                                                       // well.
+    @Column(name = "image")
     private byte[] image;
 
     @NotNull
