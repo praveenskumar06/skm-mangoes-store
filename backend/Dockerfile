@@ -3,6 +3,8 @@ FROM eclipse-temurin:21-jdk-jammy AS build
 WORKDIR /app
 COPY . .
 # Skip tests to speed up build and avoid environment dependency issues during build
+RUN sed -i 's/\r$//' gradlew
+RUN chmod +x gradlew
 RUN ./gradlew clean build -x test
 
 # Run Stage
