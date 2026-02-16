@@ -49,7 +49,7 @@ export default function Settings() {
     <div>
       <h1 className="text-3xl font-bold text-green-800 mb-6">Settings</h1>
 
-      <div className="bg-white rounded-lg shadow p-6 max-w-2xl">
+      <div className="bg-white rounded-lg shadow p-4 sm:p-6 max-w-2xl">
         {/* Season Toggle */}
         {seasonActive !== undefined && (
           <div className="mb-6 p-4 bg-yellow-50 rounded-lg">
@@ -84,7 +84,7 @@ export default function Settings() {
           {Object.entries(settings)
             .filter(([key]) => key !== 'season_active' && settingLabels[key])
             .map(([key, value]) => (
-            <div key={key} className="flex items-center justify-between py-3 border-b">
+            <div key={key} className="flex flex-col sm:flex-row sm:items-center justify-between py-3 border-b gap-2">
               <label className="text-gray-700 font-medium">
                 {settingLabels[key]}
               </label>
@@ -106,7 +106,7 @@ export default function Settings() {
                 <input
                   value={value}
                   onChange={(e) => handleChange(key, e.target.value)}
-                  className="px-3 py-1.5 border rounded-lg outline-none focus:ring-2 focus:ring-green-500 w-64 text-right"
+                  className="px-3 py-1.5 border rounded-lg outline-none focus:ring-2 focus:ring-green-500 w-full sm:w-64 text-left sm:text-right"
                 />
               )}
             </div>

@@ -12,7 +12,8 @@ export default function AdminLayout() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="flex gap-6">
-        <aside className="w-56 shrink-0">
+        {/* Desktop sidebar only — mobile uses Navbar hamburger menu */}
+        <aside className="hidden md:block w-56 shrink-0">
           <h2 className="text-lg font-bold text-green-800 mb-4">Admin Panel</h2>
           <nav className="space-y-1">
             {links.map((l) => (
@@ -33,6 +34,7 @@ export default function AdminLayout() {
             ))}
           </nav>
         </aside>
+
         <main className="flex-1 min-w-0">
           <Outlet />
         </main>

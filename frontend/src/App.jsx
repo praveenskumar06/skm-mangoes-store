@@ -5,6 +5,7 @@ import { SeasonProvider } from './context/SeasonContext';
 import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import ScrollToTop from './components/common/ScrollToTop';
 
 import Home from './pages/store/Home';
 import Products from './pages/store/Products';
@@ -34,6 +35,7 @@ export default function App() {
       <AuthProvider>
         <SeasonProvider>
         <CartProvider>
+          <ScrollToTop />
           <div className="min-h-screen flex flex-col bg-gray-50">
             <Navbar />
             <main className="flex-1">

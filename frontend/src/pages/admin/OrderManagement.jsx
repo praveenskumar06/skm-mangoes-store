@@ -358,10 +358,10 @@ export default function OrderManagement() {
             return (
               <div key={order.id} className="bg-white rounded-lg shadow overflow-hidden">
                 {/* Order Header */}
-                <div className="p-5 cursor-pointer hover:bg-gray-50 transition" onClick={() => toggleExpand(order.id)}>
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-1">
+                <div className="p-4 sm:p-5 cursor-pointer hover:bg-gray-50 transition" onClick={() => toggleExpand(order.id)}>
+                  <div className="flex justify-between items-start gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-1">
                         <p className="font-bold text-lg">Order #{order.id}</p>
                         <span className={`px-3 py-0.5 rounded-full text-xs font-semibold ${STATUS_COLORS[order.status] || ''}`}>
                           {order.status?.replace(/_/g, ' ')}
@@ -373,8 +373,8 @@ export default function OrderManagement() {
                       </p>
                       {addr && <p className="text-sm text-gray-500 mt-1">📍 {addr.city}, {addr.state}</p>}
                     </div>
-                    <div className="text-right flex flex-col items-end">
-                      <p className="text-xl font-bold text-green-700">{CURRENCY_SYMBOL}{order.totalAmount}</p>
+                    <div className="text-right flex flex-col items-end shrink-0">
+                      <p className="text-lg sm:text-xl font-bold text-green-700">{CURRENCY_SYMBOL}{order.totalAmount}</p>
                       <p className="text-xs text-gray-400 mt-1">{order.items?.length || 0} item(s)</p>
                       <span className="text-gray-400 text-lg mt-1">{isExpanded ? '▲' : '▼'}</span>
                     </div>

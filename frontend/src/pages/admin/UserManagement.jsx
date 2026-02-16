@@ -19,7 +19,31 @@ export default function UserManagement() {
     <div>
       <h1 className="text-3xl font-bold text-green-800 mb-6">Users</h1>
 
-      <div className="bg-white rounded-lg shadow overflow-x-auto">
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-3">
+        {users.map((u) => (
+          <div key={u.id} className="bg-white rounded-lg shadow p-4">
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="font-bold text-gray-800">{u.name}</h3>
+              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                u.role === 'ROLE_ADMIN' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-700'
+              }`}>
+                {u.role === 'ROLE_ADMIN' ? 'Admin' : 'User'}
+              </span>
+            </div>
+            <div className="space-y-1 text-sm text-gray-600">
+              <p>📞 {u.phone || '—'}</p>
+              <p>📧 {u.email || '—'}</p>
+              <p className="text-gray-400 text-xs">
+                Joined: {u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN') : '—'}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-white rounded-lg shadow overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-green-50">
             <tr>

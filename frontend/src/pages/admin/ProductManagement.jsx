@@ -167,7 +167,40 @@ export default function ProductManagement() {
         </form>
       )}
 
-      <div className="bg-white rounded-lg shadow overflow-x-auto">
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-3">
+        {products.map((p) => (
+          <div key={p.id} className="bg-white rounded-lg shadow p-4">
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="font-bold text-green-800">{p.name}</h3>
+              <span className={`text-sm font-semibold ${p.inStock ? 'text-green-600' : 'text-red-600'}`}>
+                {p.stockKg} kg
+              </span>
+            </div>
+            <div className="flex gap-3 text-sm mb-3">
+              <span className="text-gray-600">₹{p.originalPrice}/kg</span>
+              {p.salePrice && <span className="text-green-700 font-semibold">Sale: ₹{p.salePrice}/kg</span>}
+            </div>
+            <div className="flex flex-wrap gap-2 mb-3">
+              <button onClick={() => handleToggleActive(p.id)}
+                className={`px-3 py-1 rounded-full text-xs font-semibold transition ${p.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                {p.active ? '✅ Active' : '❌ Inactive'}
+              </button>
+              <button onClick={() => handleToggleSpecial(p.id)}
+                className={`px-3 py-1 rounded-full text-xs font-semibold transition ${p.special ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-500'}`}>
+                {p.special ? '⭐ Special' : '— Normal'}
+              </button>
+            </div>
+            <div className="flex gap-4 pt-2 border-t">
+              <button onClick={() => handleEdit(p)} className="text-blue-600 text-sm font-medium">✏️ Edit</button>
+              <button onClick={() => handleDelete(p.id)} className="text-red-600 text-sm font-medium">🗑️ Delete</button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden md:block bg-white rounded-lg shadow overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-green-50">
             <tr>

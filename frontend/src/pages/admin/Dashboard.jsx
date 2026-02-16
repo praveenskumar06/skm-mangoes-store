@@ -70,15 +70,15 @@ export default function Dashboard() {
       <h1 className="text-3xl font-bold text-green-800 mb-6">📊 Dashboard</h1>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 sm:gap-4 mb-8">
         {summaryCards.map((c) => (
-          <div key={c.label} className={`${c.color} rounded-xl p-5 shadow-sm`}>
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs font-medium opacity-80">{c.label}</p>
-                <p className="text-2xl font-bold mt-1">{c.value}</p>
+          <div key={c.label} className={`${c.color} rounded-xl p-3 sm:p-5 shadow-sm`}>
+            <div className="flex items-center justify-between gap-1">
+              <div className="min-w-0">
+                <p className="text-xs font-medium opacity-80 truncate">{c.label}</p>
+                <p className="text-xl sm:text-2xl font-bold mt-1 truncate">{c.value}</p>
               </div>
-              <span className="text-3xl">{c.icon}</span>
+              <span className="text-2xl sm:text-3xl shrink-0">{c.icon}</span>
             </div>
           </div>
         ))}
