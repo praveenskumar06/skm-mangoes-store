@@ -6,6 +6,7 @@ import Navbar from './components/common/Navbar';
 import Footer from './components/common/Footer';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import ScrollToTop from './components/common/ScrollToTop';
+import PageTransition from './components/common/PageTransition';
 
 import Home from './pages/store/Home';
 import Products from './pages/store/Products';
@@ -39,6 +40,7 @@ export default function App() {
           <div className="min-h-screen flex flex-col bg-gray-50">
             <Navbar />
             <main className="flex-1">
+              <PageTransition>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
@@ -72,6 +74,7 @@ export default function App() {
                   <Route path="settings" element={<Settings />} />
                 </Route>
               </Routes>
+              </PageTransition>
             </main>
             <Footer />
           </div>
