@@ -179,6 +179,20 @@ public class OrderService {
         return toResponse(order);
     }
 
+    public OrderResponse getOrderForUser(Long userId, String role, Long orderId) {
+        Order order = orderRepository.findByIdWithDetails(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        boolean isAdmin = "ROLE_ADMIN".equals(role);
+        boolean isOwner = order.getUser() != null && userId != null && userId.equals(order.getUser().getId());
+
+        if (!isAdmin && !isOwner) {
+            throw new BusinessException("Order does not belong to the user");
+        }
+
+        return toResponse(order);
+    }
+
     private OrderResponse toResponse(Order order) {
         OrderResponse response = new OrderResponse();
         response.setId(order.getId());

@@ -44,12 +44,19 @@ public class OrderController {
     public ResponseEntity<ApiResponse> getOrder(
             @RequestHeader("Authorization") String authHeader,
             @PathVariable Long id) {
-        OrderResponse order = orderService.getOrder(id);
+        Long userId = extractUserId(authHeader);
+        String role = extractRole(authHeader);
+        OrderResponse order = orderService.getOrderForUser(userId, role, id);
         return ResponseEntity.ok(ApiResponse.success("Order retrieved", order));
     }
 
     private Long extractUserId(String authHeader) {
         String token = authHeader.replace("Bearer ", "");
         return jwtUtil.getUserIdFromToken(token);
+    }
+
+    private String extractRole(String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        return jwtUtil.getRoleFromToken(token);
     }
 }

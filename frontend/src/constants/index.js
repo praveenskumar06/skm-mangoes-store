@@ -30,8 +30,9 @@ export const DEMO_USER = { phone: '8888888888', password: 'user@123' };
 // Use environment variable for production, fallback to /api for local dev
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
-// Google OAuth (replace with your Google Cloud Console client ID)
-export const GOOGLE_CLIENT_ID = '709713951478-5ij42t2bqfdk1finil8k0vci9075nvie.apps.googleusercontent.com';
+// Google OAuth
+// Set VITE_GOOGLE_CLIENT_ID in your deployment environment for production
+export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '709713951478-5ij42t2bqfdk1finil8k0vci9075nvie.apps.googleusercontent.com';
 
 // Social Media & External Links (update before production)
 export const SOCIAL_LINKS = {
